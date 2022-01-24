@@ -49,7 +49,7 @@ person2.age = 26;
 
 
 
-// ******************************************** constructer *******************************************
+// ******************************************** constructor *******************************************
 
 function Person(firstNameValue,lastNameValue, ageValue, genderValue){
     this.firstName = firstNameValue;
@@ -58,7 +58,7 @@ function Person(firstNameValue,lastNameValue, ageValue, genderValue){
     this.gender = genderValue; 
 }
 
-// ConstructerName.prototype.methodName => to create a new method 
+// ConstructorName.prototype.methodName => to create a new method 
 
  Person.prototype.fullName = function() {
     let fN = `${this.firstName} Ayoub ${this.lastName} my age is ${this.age}`;
