@@ -14,7 +14,7 @@ You are building a ToDo List Web Application, where the Users can display their 
    - Open it in VS code.
 
 2. **Continue adding functionality to your project**:
-   - As a user, I would like to answer more questions.So you should add new three (Yes/No) questions.
+   - As a user, I would like to answer more questions.So you should add new three (Yes/No / y / n) questions.
    - If the input was empty consider the answer is "invalid" string.
    - Consider putting all the answers into an array.
    - traverse the array and print the items on the console.
