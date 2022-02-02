@@ -6,7 +6,7 @@ const cors = require('cors');
 const axios = require('axios');
 // first require pg 
 const pg = require('pg');
-
+x=c; 
 // second go and create a database in your postgress (ununtu):
 // psql 
 // CREATE DATABASE dbName;
