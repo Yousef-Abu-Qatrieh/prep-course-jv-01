@@ -6,7 +6,6 @@ const cors = require('cors');
 const axios = require('axios');
 // first require pg 
 const pg = require('pg');
-x=c; 
 // second go and create a database in your postgress (ununtu):
 // psql 
 // CREATE DATABASE dbName;
@@ -30,6 +29,14 @@ server.get('/searchRecipes',searchRecipesHandler);
 
 server.post('/addFavRecipes',addFavRecipesHandler);
 server.get('/myFavRecipes',myFavRecipesHandler);
+
+server.get('/oneFavRecipes/:id',oneFavRecipesHandler);
+
+
+server.put('/updateRecipe/:id/:name',updateRecipeHandler); // the name param is just for testing 
+server.delete('/deleteRecipe/:id',deleteRecipeHandler);
+
+
 
 
 server.use('*',notFoundHandler);
@@ -95,10 +102,10 @@ function searchRecipesHandler(req,res){
 function addFavRecipesHandler(req,res){
   const recipe = req.body;
 //   console.log(recipe)
-  let sql = `INSERT INTO favRecipes(title,readyInMinutes,summary,vegetarian,instructions,sourceUrl) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *;`
+  let sql = `INSERT INTO favRecipes(title,readyInMinutes,summary,vegetarian,instructions,sourceUrl) VALUES ($1,$2,$3, $4, $5, $6) RETURNING *;`
   let values=[recipe.title,recipe.readyInMinutes,recipe.summary,recipe.vegetarian,recipe.instructions,recipe.sourceUrl];
   client.query(sql,values).then(data =>{
-      res.status(200).json(data.rows);
+      res.status(201).json(data.rows);
   }).catch(error=>{
       errorHandler(error,req,res)
   });
@@ -114,6 +121,49 @@ function myFavRecipesHandler(req,res){
     });
 }
 
+
+function oneFavRecipesHandler(req,res){
+
+    let sql = `SELECT * FROM favRecipes WHERE id=${req.params.id};`;
+    // let sql = `SELECT * FROM favRecipes WHERE readyInMinutes<60;`;
+
+    client.query(sql).then(data=>{
+       res.status(200).json(data.rows);
+    }).catch(error=>{
+        errorHandler(error,req,res)
+    });
+}
+
+function updateRecipeHandler (req,res){
+    const id = req.params.id;
+    console.log(req.params.name);
+    const recipe = req.body;
+    const sql = `UPDATE favRecipes SET title =$1, readyInMinutes = $2, summary = $3 ,vegetarian=$4, instructions=$5, sourceUrl =$6 WHERE id=$7 RETURNING *;`; 
+    let values=[recipe.title,recipe.readyinminutes,recipe.summary,recipe.vegetarian,recipe.instructions,recipe.sourceUrl,id];
+    client.query(sql,values).then(data=>{
+        res.status(200).json(data.rows);
+        // res.status(204)
+    }).catch(error=>{
+        errorHandler(error,req,res)
+    });
+
+// UPDATE table_name
+// SET column1 = value1, column2 = value2, ...
+// WHERE condition;
+}
+
+function deleteRecipeHandler(req,res){
+    const id = req.params.id;
+    const sql = `DELETE FROM favRecipes WHERE id=${id};` 
+    // DELETE FROM table_name WHERE condition;
+
+    client.query(sql).then(()=>{
+        res.status(200).send("The Recipe has been deleted");
+        // res.status(204).json({});
+    }).catch(error=>{
+        errorHandler(error,req,res)
+    });
+}
 
 
 
