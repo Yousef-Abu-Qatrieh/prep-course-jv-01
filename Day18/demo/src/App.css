@@ -1,0 +1,10 @@
+.title{
+  display: flex;
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.title h1{
+  padding: 20px;
+}
